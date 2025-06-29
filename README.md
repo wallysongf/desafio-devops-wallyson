@@ -16,27 +16,6 @@ Demonstrar capacidade técnica para:
 - Identificar gargalos e propor melhorias práticas com foco em custo, performance e disponibilidade
 - Documentar toda a proposta de forma objetiva, visual e funcional
 
----
-
-Estrutura do Repositório
-
-├── desafio-1-jenkins/ # Parte 1 – Jenkins + Blue-Green
-│ ├── Jenkinsfile
-│ ├── deploy.sh
-│ ├── README.md
-│ └── diagramas/
-│ └── blue-green-jenkins-nginx.png
-│
-├── desafio-2-scraping/ # Parte 2 – Scraping AWS Lambda
-│ ├── scraper.py
-│ ├── infra-original.md
-│ ├── README.md
-│ └── diagramas/
-│ ├── arquitetura-atual.png
-│ └── arquitetura-otimizada.png
-
----
-
 Parte 1 – Jenkins + Blue-Green Deployment
 
 - Implementação de pipeline CI/CD com Jenkins Pipeline Declarativo
@@ -109,3 +88,36 @@ Jenkins
 ./deploy.sh deploy green
 ./deploy.sh switch green
 ./deploy.sh test
+
+```
+
+Estimativa Comparativa de Custos
+
+| Item                                   | Arquitetura Atual                             | Arquitetura Otimizada                          |
+|----------------------------------------|-----------------------------------------------|------------------------------------------------|
+| Execução Lambda (com Docker)       | + Alto cold start<br>+ Tempo limite maior     | - Baixo cold start<br>- Custo por ms menor     |
+| Volume de Execuções                | Necessita recriar função Lambda a cada falha  | Reutiliza mesma função com retry controlado     |
+| IP Dinâmico (troca de IP)          | Nova função = novo IP (infra duplicada)       | NAT Gateway com IP pool fixo e controlado      |
+| Orquestração (Terraform)           | Redeclarações frequentes de recursos          | Step Function coordena com menos criação infra |
+| Provisionamento de imagem Docker   | Armazenamento + pull a cada execução          | Nenhum (deploy ZIP leve e rápido)              |
+
+Estimativa geral (AWS)  
+Com base em workloads médios (~1000 execuções/dia):
+
+- Arquitetura atual:  
+  `US$ 80 a 120/mês` (Lambda com container, recriação, NAT, downloads)
+
+- Arquitetura otimizada:  
+  `US$ 25 a 40/mês` (Lambda ZIP, NAT fixo, Step Functions com retry simples)
+
+Redução estimada: ~60–75% no custo total mensal
+
+---
+
+Fontes de referência:
+
+- [AWS Lambda Pricing (oficial)](https://aws.amazon.com/lambda/pricing/)
+- [Pricing for Lambda with container images](https://aws.amazon.com/blogs/compute/introducing-aws-lambda-support-for-container-images/)
+- [AWS Step Functions Pricing](https://aws.amazon.com/step-functions/pricing/)
+- [AWS NAT Gateway Pricing](https://aws.amazon.com/vpc/pricing/)
+- [Comparing Lambda ZIP vs. Container Deployments (Medium)](https://medium.com/the-cloud-architect/aws-lambda-deployment-zips-vs-containers-c6b0ee5d4f30)
