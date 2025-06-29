@@ -1,0 +1,35 @@
+pipeline {
+  agent any
+  environment {
+    APP_NAME = "aplicacao-desafio"
+    BLUE = "blue"
+    GREEN = "green"
+  }
+  stages {
+    stage('Checkout') {
+      steps {
+        git 'https://github.com/wallysongf/desafio-devops-wallyson.git'
+      }
+    }
+    stage('Build') {
+      steps {
+        sh './deploy.sh build'
+      }
+    }
+    stage('Deploy') {
+      steps {
+        script {
+          def current_color = sh(script: "./deploy.sh current", returnStdout: true).trim()
+          def target_color = (current_color == BLUE) ? GREEN : BLUE
+          sh "./deploy.sh deploy ${target_color}"
+          sh "./deploy.sh switch ${target_color}"
+        }
+      }
+    }
+    stage('Post-Deploy Test') {
+      steps {
+        sh './deploy.sh test'
+      }
+    }
+  }
+}
