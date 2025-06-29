@@ -20,7 +20,7 @@ Demonstrar capacidade técnica para:
 
 Estrutura do Repositório
 
-├── jenkins-deploy/ # Parte 1 – Jenkins + Blue-Green
+├── desafio-1-jenkins/ # Parte 1 – Jenkins + Blue-Green
 │ ├── Jenkinsfile
 │ ├── deploy.sh
 │ ├── README.md
@@ -30,7 +30,7 @@ Estrutura do Repositório
 ├── desafio-2-scraping/ # Parte 2 – Scraping AWS Lambda
 │ ├── scraper.py
 │ ├── infra-original.md
-│ ├── infra-melhorada.md
+│ ├── README.md
 │ └── diagramas/
 │ ├── arquitetura-atual.png
 │ └── arquitetura-otimizada.png
@@ -44,10 +44,10 @@ Parte 1 – Jenkins + Blue-Green Deployment
 - Simulação de build/deploy/switch/test com script `deploy.sh`
 
 📄 Documentação detalhada:  
-👉 [desafio-1-jenkins/README.md`](jenkins-deploy/README.md)
+👉 [`README.md`](desafio-1-jenkins/README.md)
 
 📊 Diagrama da arquitetura Jenkins + NGINX:  
-👉 [`blue-green-jenkins-nginx.png`](jenkins-deploy/diagramas/blue-green-jenkins-nginx.png)
+👉 [`blue-green-jenkins-nginx.png`](diagramas/blue-green-jenkins-nginx.png)
 
 ---
 
@@ -60,10 +60,7 @@ Arquitetura Atual
 - Reação a bloqueios de IP criando novas funções Lambda com novo IP
 
 📄 Análise completa:  
-👉 [`desafio-2-scraping/infra-original.md`](desafio-2-scraping/infra-original.md)
-
-📊 Diagrama da arquitetura atual:  
-👉 [`arquitetura-atual.png`](desafio-2-scraping/diagramas/arquitetura-atual.png)
+👉 [`README.md`](desafio-2-scraping/README.md)
 
 ---
 
@@ -75,10 +72,10 @@ Proposta de Melhoria
 - Armazenamento de estado e tentativas via DynamoDB
 
 📄 Documentação da proposta:  
-👉 [`desafio-2-scraping/infra-melhorada.md`](desafio-2-scraping/infra-melhorada.md)
+👉 [`README.md`](desafio-2-scraping/README.md)
 
 📊 Diagrama da arquitetura otimizada:  
-👉 [`arquitetura-otimizada.png`](desafio-2-scraping/diagramas/arquitetura-otimizada.png)
+👉 [`arquitetura-otimizada.png`](diagramas/arquitetura-otimizada.png)
 
 ---
 
@@ -87,7 +84,7 @@ Exemplo de Código Python (Lambda)
 - Função `scraper.py` detecta IP bloqueado (código HTTP 403) e retorna instruções para retry
 - Pode ser usada dentro de Step Functions com retries controlados
 
-📄 [`desafio-2-scraping/scraper.py`](desafio-2-scraping/scraper.py)
+📄 [`scraper.py`](desafio-2-scraping/scraper.py)
 
 ---
 
